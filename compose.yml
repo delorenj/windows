@@ -4,6 +4,7 @@ services:
     container_name: windows
     environment:
       VERSION: "11"
+      ARGUMENTS: "-device usb-host,vendorid=0x1235,productid=0x821a"
     devices:
       - /dev/kvm
       - /dev/net/tun
@@ -14,6 +15,9 @@ services:
       - 3389:3389/tcp
       - 3389:3389/udp
     volumes:
+      - ./data:/data
       - ./windows:/storage
+      - ./windows11prox64.iso:/boot.iso # Custom ISO - VERSION env var ignored
+    privileged: true  # Required for USB passthrough
     restart: always
     stop_grace_period: 2m
